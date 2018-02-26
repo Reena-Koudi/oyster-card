@@ -1,17 +1,22 @@
 require 'card'
 describe Card do
+  subject(:card) { described_class.new }
   describe '#balance' do
     it 'should return balance of 0' do
-      expect(subject.balance).to eq (0)
+      expect(card.balance).to eq (0)
     end
   end
   describe '#top_up' do
     it 'should respond to top_up with 1 argument' do
-    expect(subject).to respond_to(:top_up).with(1).argument
-   end
-    it 'should top up the card with the amount given' do
-      expect{ subject.top_up 1 }.to change{ subject.balance }.by 1
-
+      expect(card).to respond_to(:top_up).with(1).argument
     end
+    it 'should top up the card with the amount given' do
+      expect{ card.top_up 1 }.to change{ card.balance }.by 1
+    end
+     it 'should raise an error when balance exceeds the max limit' do
+       limit = Card::LIMIT
+       card.top_up(limit)
+       expect{ card.top_up 1 }.to raise_error "Maximum limit of #{limit} reached"
+     end
   end
 end
