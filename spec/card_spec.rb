@@ -19,4 +19,14 @@ describe Card do
        expect{ card.top_up 1 }.to raise_error "Maximum limit of #{limit} reached"
      end
   end
+  describe '#deduct' do
+    subject(:card) { described_class.new }
+    it 'should respond to deduct with 1 argument' do
+      expect(card).to respond_to(:deduct).with(1).argument
+    end
+    it 'should deduct amount given from the balance' do
+      card.top_up(30)
+      expect{ card.deduct 1 }.to change{ card.balance }.by -1
+    end
+  end
 end

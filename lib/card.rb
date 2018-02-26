@@ -10,4 +10,8 @@ class Card
     fail "Maximum limit of #{LIMIT} reached" if amount + balance > LIMIT
     @balance += amount
   end
+
+  def deduct(amount)
+    @balance -= amount
+  end
 end
