@@ -2,12 +2,13 @@ class Card
   LIMIT = 90
   MINIMUM_BALANCE = 1
   MINIMUM_FARE = 5
-  attr_reader :balance
-  attr_accessor :touch
+  attr_reader :balance, :entry_station
+  attr_accessor :journeys
   def initialize(limit = LIMIT)
     @balance = 0
     @limit = limit
-    @touch = false
+    @entry_station = nil
+    @journeys = []
   end
 
   def top_up(amount)
@@ -15,18 +16,20 @@ class Card
     @balance += amount
   end
 
-  def touch_in
+  def touch_in(entry_station)
     fail 'Minimum balance to touch in' if @balance < MINIMUM_BALANCE
-    @touch = true
+    @entry_station = entry_station
   end
 
-  def touch_out
+  def touch_out(exit_station)
+    @journeys.push({entry: @entry_station, exit: exit_station })
     deduct(MINIMUM_FARE)
-    @touch = false
+    @entry_station = nil
   end
   def in_journey?
-    @touch
+    @entry_station != nil
   end
+
   private
   def deduct(amount)
     @balance -= amount
