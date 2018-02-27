@@ -11,7 +11,7 @@ describe Card do
       expect(card).to respond_to(:top_up).with(1).argument
     end
     it 'should top up the card with the amount given' do
-      expect{ card.top_up 1 }.to change{ card.balance }.by 1
+      expect{ card.top_up(1) }.to change{ card.balance }.by 1
     end
      it 'should raise an error when balance exceeds the max limit' do
        limit = Card::LIMIT
@@ -29,4 +29,22 @@ describe Card do
       expect{ card.deduct 1 }.to change{ card.balance }.by -1
     end
   end
+  describe '#touch_in' do
+    it 'should set in_journey? to true' do
+      expect{ card.touch_in }.to change{card.in_journey?}.from(false).to(true)
+    end
+  end
+  describe '#touch_out' do
+      it 'should change in_journey? from true to false' do
+        card.touch_in
+        expect{ card.touch_out }.to change{card.in_journey?}.from(true).to(false)
+
+      end
+    end
+   describe '#in_journey?' do
+     it 'should set in_journey? to be false' do
+       expect(card.in_journey?).to be false
+       end
+   end
+
 end
