@@ -19,26 +19,33 @@ describe Card do
        expect{ card.top_up 1 }.to raise_error "Maximum limit of #{limit} reached"
      end
   end
-  describe '#deduct' do
-    subject(:card) { described_class.new }
-    it 'should respond to deduct with 1 argument' do
-      expect(card).to respond_to(:deduct).with(1).argument
-    end
-    it 'should deduct amount given from the balance' do
-      card.top_up(30)
-      expect{ card.deduct 1 }.to change{ card.balance }.by -1
-    end
-  end
+  # describe '#deduct' do
+  #   subject(:card) { described_class.new }
+  #   it 'should respond to deduct with 1 argument' do
+  #     expect(card).to respond_to(:deduct).with(1).argument
+  #   end
+  #   it 'should deduct amount given from the balance' do
+  #     card.top_up(30)
+  #     expect{ card.deduct 1 }.to change{ card.balance }.by -1
+  #   end
+  # end
   describe '#touch_in' do
     it 'should set in_journey? to true' do
+      card.top_up(10)
       expect{ card.touch_in }.to change{card.in_journey?}.from(false).to(true)
+    end
+    it 'should not let me touch_in if the balance is less than 1' do
+       expect{ card.touch_in }.to raise_error "Minimum balance to touch in"
     end
   end
   describe '#touch_out' do
       it 'should change in_journey? from true to false' do
+        card.top_up(10)
         card.touch_in
         expect{ card.touch_out }.to change{card.in_journey?}.from(true).to(false)
-
+      end
+      it 'should deduct minimum fare from card for touch_out' do
+        expect{ card.touch_out }.to change{ card.balance }.by (-Card::MINIMUM_FARE)
       end
     end
    describe '#in_journey?' do
