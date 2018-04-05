@@ -1,21 +1,26 @@
 require 'journey'
 
 describe Journey do
-
-  context '2 stations given as parameters' do
-    subject(:journey) { described_class.new("Feltham", "Monument") }
-    it 'Fare should be set to minimum' do
-      expect(journey.fare).to eq(Journey::MINIMUM_FARE)
+subject(:journey) { described_class.new }
+  context 'Initilization' do
+    it 'set single_journey to an empty array' do
+      expect(journey.journeys_log).to eq []
     end
-
-    it 'should check for the entry station' do
-      expect(journey.entry_station).to eq "Feltham"
+    it 'set entry_station to nil' do
+      expect(journey.single_journey[:entry]).to eq nil
     end
-
-    it 'should check for the exit station' do
-      expect(journey.exit_station).to eq "Monument"
+    it 'set exit_station to nil' do
+      expect(journey.single_journey[:exit]).to eq nil
     end
-  end
+end
+    # it 'should check for the entry station' do
+    #   expect(journey.entry_station).to eq :entry_station
+    # end
+    #
+    # it 'should check for the exit station' do
+    #   expect(journey.exit_station).to eq :exit_station
+    # end
+
 
     context 'entry station is nil' do
       subject(:journey) { described_class.new(nil, :exit_station) }
